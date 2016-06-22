@@ -1,40 +1,24 @@
 require 'spec_helper'
 
 describe Lita::Handlers::OnewheelBeerWework, lita_handler: true do
-  it 'sets a document' do
-    send_command 'doc one http://one'
-    expect(replies.last).to eq('Documented one as http://one')
+  it { is_expected.to route_command('wework') }
+  it { is_expected.to route_command('wework 2fS Breakfast Stout') }
+
+  it 'sets a beer' do
+    send_command 'wework 2fs Breakfast Stout'
+    expect(replies.last).to eq('Logged Breakfast Stout at 2fS!')
   end
 
-  it 'gets a document' do
-    send_command 'doc one http://one'
-    send_command 'doc one'
-    expect(replies.last).to eq('one: http://one')
+  it 'gets a beer' do
+    send_command 'wework 2fs Breakfast Stout'
+    send_command 'wework 2fs'
+    expect(replies.last).to eq('2fS: Breakfast Stout')
   end
 
   it 'lists documents' do
-    send_command 'doc one http://one'
-    send_command 'doc two http://two'
-    send_command 'doc'
-    expect(replies.last).to eq("one: http://one\ntwo: http://two")
+    send_command 'wework 2fs one'
+    send_command 'wework 2fN two'
+    send_command 'wework'
+    expect(replies.last).to eq("2fS: one, 2fN: two")
   end
-
-  it 'documents real urls' do
-    send_command 'doc pachinko-endpoints https://shopigniter.atlassian.net/wiki/display/I5/Pachinko+Endpoints'
-    expect(replies.last).to eq('Documented pachinko-endpoints as https://shopigniter.atlassian.net/wiki/display/I5/Pachinko+Endpoints')
-  end
-
-  it 'deletes documents' do
-    send_command 'doc one http://one'
-    send_command 'docdel one'
-    expect(replies.last).to eq('Document deleted: one')
-  end
-
-  it 'finds by partial key' do
-    send_command 'doc pacone http://one'
-    send_command 'doc pactwo http://two'
-    send_command 'doc pac'
-    expect(replies.last).to eq("pacone: http://one\npactwo: http://two")
-  end
-
 end

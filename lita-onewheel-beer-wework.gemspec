@@ -1,11 +1,11 @@
 Gem::Specification.new do |spec|
-  spec.name          = 'lita-onewheel-doc'
-  spec.version       = '2.0.1'
+  spec.name          = 'lita-onewheel-beer-wework'
+  spec.version       = '0.0.0'
   spec.authors       = ['Andrew Kreps']
   spec.email         = ['andrew.kreps@gmail.com']
-  spec.description   = 'Basic key/value store designed for http links.'
+  spec.description   = 'Basic key/value store for wework beers.'
   spec.summary       = 'Will do it\'s best to store urls under the key specified.'
-  spec.homepage      = 'https://github.com/onewheelskyward/lita-onewheel-doc'
+  spec.homepage      = 'https://github.com/onewheelskyward/lita-onewheel-beer-wework'
   spec.license       = 'MIT'
   spec.metadata      = { 'lita_plugin_type' => 'handler' }
 
@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'lita', '~> 4.4'
+  spec.add_runtime_dependency 'lita', '~> 4'
 
   spec.add_development_dependency 'bundler', '~> 1.3'
   # spec.add_development_dependency 'pry-byebug', '~> 3.1'
