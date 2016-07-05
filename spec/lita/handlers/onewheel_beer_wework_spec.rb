@@ -19,6 +19,7 @@ describe Lita::Handlers::OnewheelBeerWework, lita_handler: true do
     send_command 'wework 2fs one'
     send_command 'wework 2fN two'
     send_command 'wework'
-    expect(replies.last).to eq("2fS: one, 2fN: two")
+    expect(replies[2]).to eq('2fS: one')
+    expect(replies.last).to eq('2fN: two')
   end
 end
