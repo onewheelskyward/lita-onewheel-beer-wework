@@ -19,6 +19,8 @@ module Lita
             command: true,
             help: {'!wework 2fS        ' => 'fetch the beer for 2fS'}
 
+      http.get '/wework', :get_json_beers  # For aaronpk and Loqi
+
       def command_add_beer(response)
         key = response.matches[0][0].downcase
         unless LOCATIONS.include? key
@@ -53,13 +55,22 @@ module Lita
       end
 
       def command_list_beers(response)
-        test = redis.hgetall(REDIS_KEY)
         LOCATIONS.each do |floor|
           if (data = redis.hget(REDIS_KEY, floor))
             floor, keg_name = get_floor_and_keg_name(floor => data)
             response.reply "#{floor}: #{keg_name}"
           end
         end
+      end
+
+      def get_json_beers(request, response)
+        all_beers = []
+        LOCATIONS.each do |floor|
+          if (data = redis.hget(REDIS_KEY, floor))
+            all_beers.push floor => JSON.parse(data)
+          end
+        end
+        response.body = all_beers.to_json
       end
 
       def get_values_that_start_with_key(key)

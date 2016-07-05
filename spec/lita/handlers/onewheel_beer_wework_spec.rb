@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Lita::Handlers::OnewheelBeerWework, lita_handler: true do
   it { is_expected.to route_command('wework') }
   it { is_expected.to route_command('wework 2fS Breakfast Stout') }
+  it { is_expected.to route_http(:get, '/wework') }
 
   it 'sets a beer' do
     send_command 'wework 2fs Breakfast Stout'
@@ -27,4 +28,11 @@ describe Lita::Handlers::OnewheelBeerWework, lita_handler: true do
     expect(replies[2]).to eq('2fs: one')
     expect(replies.last).to eq('2fn: two')
   end
+
+  # it 'wework http routes' do
+  #   send_command 'wework 2fs one'
+  #   send_command 'wework 2fN two'
+  #   response = http.get('/wework')
+  #   expect(JSON.parse response.body).to eq('bar')
+  # end
 end
