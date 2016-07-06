@@ -70,7 +70,9 @@ module Lita
             all_beers.push floor => JSON.parse(data)
           end
         end
-        response.body = all_beers.to_json
+        Lita.logger.info 'Sending beers via HTTP.'
+        response.headers['Content-Type'] = 'application/json'
+        response.write all_beers.to_json
       end
 
       def get_values_that_start_with_key(key)
