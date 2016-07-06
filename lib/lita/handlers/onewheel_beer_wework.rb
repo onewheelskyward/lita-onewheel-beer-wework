@@ -67,8 +67,9 @@ module Lita
         all_beers = []
         LOCATIONS.each do |floor|
           if (data = redis.hget(REDIS_KEY, floor))
-            data['id'] = floor
-            all_beers.push JSON.parse(data)
+            d = JSON.parse(data)
+            d['id'] = floor
+            all_beers.push d
           end
         end
         Lita.logger.info 'Sending beers via HTTP.'
