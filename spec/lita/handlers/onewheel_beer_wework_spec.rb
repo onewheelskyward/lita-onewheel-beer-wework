@@ -29,6 +29,12 @@ describe Lita::Handlers::OnewheelBeerWework, lita_handler: true do
     expect(replies.last).to eq('2fn: two')
   end
 
+  it 'blows a keg' do
+    send_command 'wework 1fn ipa'
+    send_command 'wework 1fn blow'
+    expect(replies.last).to eq('1fn ipa BLOWN')
+  end
+
   # it 'wework http routes' do
   #   send_command 'wework 2fs one'
   #   send_command 'wework 2fN two'

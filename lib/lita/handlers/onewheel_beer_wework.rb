@@ -9,7 +9,7 @@ module Lita
       route /^wework\s+([\w\/+_-]+)\s+(.*)$/i,
             :command_add_beer,
             command: true,
-            help: {'!wework 2fS Beer' => 'Add a beer to 2fS'}
+            help: {'!wework 2fS Beer   ' => 'Add a beer to 2fS', '!wework 1fn blow   ' => 'Blows the keg on 1fn.'}
       route /^wework$/i,
             :command_list_beers,
             command: true,
@@ -22,6 +22,7 @@ module Lita
       http.get '/wework', :get_json_beers  # For aaronpk and Loqi
 
       def command_add_beer(response)
+        reply = ''
         key = response.matches[0][0].downcase
         unless LOCATIONS.include? key
           Lita.logger.info "#{key} was not found in the floors array."
@@ -29,13 +30,23 @@ module Lita
         end
         beer_name = response.matches[0][1]
         key = key[0..1] + key[-1].downcase
-        value = {
-            name: beer_name,
-            user: response.user.name,
-            time: Time.now
-        }.to_json
+
+        if beer_name.downcase == 'blow'
+          stored = JSON.parse(redis.hget(REDIS_KEY, key))
+          stored['name'] += ' BLOWN'
+          reply = "#{key} #{stored['name']}"
+          value = stored.to_json
+        else
+          value = {
+              name: beer_name,
+              user: response.user.name,
+              time: Time.now
+          }.to_json
+          reply = "Logged #{beer_name} at #{key}!"
+        end
+
         redis.hset(REDIS_KEY, key, value)
-        response.reply "Logged #{beer_name} at #{key}!"
+        response.reply reply
       end
 
       def command_fetch_beer(response)
