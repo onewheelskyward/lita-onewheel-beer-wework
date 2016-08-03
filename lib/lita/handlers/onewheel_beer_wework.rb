@@ -31,7 +31,7 @@ module Lita
         beer_name = response.matches[0][1]
         key = key[0..1] + key[-1].downcase
 
-        if beer_name.downcase == 'blow'
+        if %w(blow blown).include? beer_name.downcase
           stored = JSON.parse(redis.hget(REDIS_KEY, key))
           stored['name'] += ' BLOWN'
           reply = "#{key} #{stored['name']}"
