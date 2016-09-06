@@ -36,6 +36,11 @@ module Lita
           stored['name'] += ' BLOWN'
           reply = "#{key} #{stored['name']}"
           value = stored.to_json
+        elsif %w(unblow unblown).include? beer_name.downcase
+          stored = JSON.parse(redis.hget(REDIS_KEY, key))
+          stored['name'].sub! ' BLOWN', ''
+          reply = "#{key} #{stored['name']}"
+          value = stored.to_json
         else
           value = {
               name: beer_name,
